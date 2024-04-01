@@ -3,13 +3,15 @@ import React, { useState } from 'react';
 import { 
   Avatar, Button, Container, CssBaseline, TextField, 
   FormControlLabel, Checkbox, Link, Paper, 
-  Box, Grid, Typography, Alert, Snackbar 
+  Box, Grid, Typography, Alert, Snackbar, IconButton 
 } from '@mui/material';
 import SchoolIcon from '@mui/icons-material/School'; // 用于代表老师的图标
 import CaregiverIcon from '@mui/icons-material/Face'; // 用于代表监护人的图标
 import AccountCircle from '@mui/icons-material/AccountCircle'; // 用户名图标
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'; // 密码图标
 import InputAdornment from '@mui/material/InputAdornment';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
@@ -20,6 +22,8 @@ const theme = createTheme();
 export default function LoginPage() {
   const [open, setOpen] = React.useState(false); // Snackbar的状态
   const [selectedRole, setSelectedRole] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
+
 
   // 处理表单提交
   const handleSubmit = (event) => {
@@ -31,6 +35,11 @@ export default function LoginPage() {
   const handleForgotPassword = () => {
     setOpen(true); // 打开Snackbar
   };
+
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+  
 
   // 关闭Snackbar
   const handleClose = (event, reason) => {
@@ -149,13 +158,24 @@ export default function LoginPage() {
                 fullWidth
                 name="password"
                 label="Password"
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 id="password"
                 autoComplete="current-password"
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
                       <LockOutlinedIcon />
+                    </InputAdornment>
+                  ),
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPassword}
+                        edge="end"
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
                     </InputAdornment>
                   ),
                 }}
