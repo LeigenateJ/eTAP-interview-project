@@ -1,0 +1,17 @@
+/* LoginPage.css */
+.login-container {
+    width: 100%;
+    max-width: 400px;
+    margin: auto;
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Rest of the styles go here, including color theme adjustment */
+  .user-type button.active,
+  .login-btn {
+    background-color: rgb(0, 176, 185);
+    /* ... */
+  }
+  
+  /* Add rest of the CSS to style as per the design */
+  
