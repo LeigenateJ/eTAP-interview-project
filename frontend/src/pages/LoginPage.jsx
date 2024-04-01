@@ -5,7 +5,7 @@ import {
   FormControlLabel, Checkbox, Link, Paper, 
   Box, Grid, Typography, Alert, Snackbar 
 } from '@mui/material';
-import TeacherIcon from '@mui/icons-material/LocalLibrary'; // 用于代表老师的图标
+import SchoolIcon from '@mui/icons-material/School'; // 用于代表老师的图标
 import CaregiverIcon from '@mui/icons-material/Face'; // 用于代表监护人的图标
 import AccountCircle from '@mui/icons-material/AccountCircle'; // 用户名图标
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'; // 密码图标
@@ -13,7 +13,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-import logoImage from '../assets/etap.png'
+import '../styles/LoginPage.css'
 
 const theme = createTheme();
 
@@ -63,17 +63,38 @@ export default function LoginPage() {
           xs={12}
           sm={7}
           md={7}
-          sx={{
-            backgroundImage: `url(${logoImage})`,
-            backgroundRepeat: 'no-repeat',
-            // backgroundColor: (t) =>
-            //   t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
-            backgroundSize: '600px, auto', // 调整背景图片尺寸以适应容器
-            backgroundPosition: 'center',
-            backgroundColor: 'rgb(0, 176, 185)'
-          }}
-        />
-        <Grid item xs={12} sm={5} md={5} component={Paper} elevation={6} square>
+          className="left-side-bg"
+          // sx={{
+          //   // backgroundImage: `url(${logoImage})`,
+          //   // backgroundRepeat: 'no-repeat',
+          //   // // backgroundColor: (t) =>
+          //   // //   t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
+          //   // backgroundSize: '600px, auto', // 调整背景图片尺寸以适应容器
+          //   // backgroundPosition: 'center',
+          //   backgroundColor: 'rgb(0, 176, 185)',
+          //   position: 'relative',
+          // }}
+        >
+        <div className="left-side">
+          <Typography 
+              variant="h5" 
+              component="h2" 
+              sx={{ 
+                position: 'absolute', 
+                bottom: 10, // 根据需要调整
+                width: '100%',
+                textAlign: 'center', 
+                fontWeight: 'bold', 
+                color: 'white', // 设置文字颜色为白色
+                textTransform: 'uppercase', // 文字大写
+                opacity: 1, // 确保文字始终可见，忽略这个如果您想要文字和图片同时渐变
+              }}
+            >
+              School Management System
+            </Typography>
+        </div>
+        </Grid>
+        <Grid item xs={12} sm={5} md={5}  component={Paper} elevation={6} square>
           <Box
             sx={{
               my: 8,
@@ -83,25 +104,25 @@ export default function LoginPage() {
               alignItems: 'center',
             }}
           >
-            <Typography component="h1" variant="h5" sx={{mb: 4, fontWeight: 'bold' }}>
+            <Typography component="h1" variant="h5" sx={{mb: 4, fontWeight: 'bold', color: 'rgb(0, 176, 185)' }}>
               Sign into your account
             </Typography>
-            <Typography component="p" variant="subtitle1" sx={{ my: 1 }}>
+            <Typography component="p" variant="subtitle1" sx={{ my: 1, color: 'grey.800' }}>
               I am
             </Typography>
             {/* 添加头像 */}
             <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
               <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mx: 2 }}>
                 <Avatar sx={{ bgcolor: avatarColors.teacher, cursor: 'pointer' }} onClick={() => handleRoleSelect('teacher')}>
-                  <TeacherIcon />
+                  <SchoolIcon />
                 </Avatar>
-                <Typography variant="caption" sx={{ mt: 1 }}>Teacher</Typography>
+                <Typography variant="caption" sx={{ mt: 1, color: selectedRole === 'teacher' ? 'grey.800' : 'grey.400' }}>Teacher</Typography>
               </Box>
               <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mx: 2 }}>
                 <Avatar sx={{ bgcolor: avatarColors.caregiver, cursor: 'pointer' }} onClick={() => handleRoleSelect('caregiver')}>
                   <CaregiverIcon />
                 </Avatar>
-                <Typography variant="caption" sx={{ mt: 1 }}>Caregiver</Typography>
+                <Typography variant="caption" sx={{ mt: 1, color: selectedRole === 'caregiver' ? 'grey.800' : 'grey.400' }}>Caregiver</Typography>
               </Box>
             </Box>
             <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1, width: '80%'}}>
