@@ -144,6 +144,7 @@ export default function LoginPage() {
                 name="username"
                 autoComplete="username"
                 autoFocus
+                placeholder="Password"
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
@@ -161,6 +162,7 @@ export default function LoginPage() {
                 type={showPassword ? 'text' : 'password'}
                 id="password"
                 autoComplete="current-password"
+                placeholder="Password"
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
