@@ -5,10 +5,10 @@ import {
   FormControlLabel, Checkbox, Link, Paper, 
   Box, Grid, Typography, Alert, Snackbar, IconButton 
 } from '@mui/material';
-import SchoolIcon from '@mui/icons-material/School'; // 用于代表老师的图标
-import CaregiverIcon from '@mui/icons-material/Face'; // 用于代表监护人的图标
-import AccountCircle from '@mui/icons-material/AccountCircle'; // 用户名图标
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined'; // 密码图标
+import SchoolIcon from '@mui/icons-material/School';
+import CaregiverIcon from '@mui/icons-material/Face';
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import InputAdornment from '@mui/material/InputAdornment';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
@@ -20,20 +20,19 @@ import '../styles/LoginPage.css'
 const theme = createTheme();
 
 export default function LoginPage() {
-  const [open, setOpen] = React.useState(false); // Snackbar的状态
+  const [open, setOpen] = React.useState(false); // Snackbar state
   const [selectedRole, setSelectedRole] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
 
 
-  // 处理表单提交
   const handleSubmit = (event) => {
     event.preventDefault();
-    // 处理登录逻辑
+    // handle login
   };
 
-  // 处理忘记密码点击事件
+  
   const handleForgotPassword = () => {
-    setOpen(true); // 打开Snackbar
+    setOpen(true); // open Snackbar
   };
 
   const handleClickShowPassword = () => {
@@ -41,7 +40,7 @@ export default function LoginPage() {
   };
   
 
-  // 关闭Snackbar
+  // close Snackbar
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
@@ -50,23 +49,23 @@ export default function LoginPage() {
   };
 
   const handleRoleSelect = (role) => {
-    setSelectedRole(role); // 设置选择的角色
+    setSelectedRole(role); 
   };
 
-  // 自定义的颜色
+  // customized color
   const avatarColors = {
     teacher: selectedRole === 'teacher' ? 'rgb(0, 150, 136)' : 'grey',
     caregiver: selectedRole === 'caregiver' ? 'rgb(255, 193, 7)' : 'grey',
   };
     
-  // // 定义一个和谐的颜色
+  // 
   // const avatarColor = theme.palette.aqua || { main: 'rgb(0, 150, 136)' };
 
   return (
     <ThemeProvider theme={theme}>
       <Grid container component="main" sx={{ height: '100vh' }}>
         <CssBaseline />
-        {/* 调整图片大小的样式 */}
+        {/* adjust image size*/}
         <Grid
           item
           xs={12}
@@ -78,7 +77,7 @@ export default function LoginPage() {
           //   // backgroundRepeat: 'no-repeat',
           //   // // backgroundColor: (t) =>
           //   // //   t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
-          //   // backgroundSize: '600px, auto', // 调整背景图片尺寸以适应容器
+          //   // backgroundSize: '600px, auto', // 
           //   // backgroundPosition: 'center',
           //   backgroundColor: 'rgb(0, 176, 185)',
           //   position: 'relative',
@@ -90,13 +89,13 @@ export default function LoginPage() {
               component="h2" 
               sx={{ 
                 position: 'absolute', 
-                bottom: 10, // 根据需要调整
+                bottom: 10,
                 width: '100%',
                 textAlign: 'center', 
                 fontWeight: 'bold', 
-                color: 'white', // 设置文字颜色为白色
-                textTransform: 'uppercase', // 文字大写
-                opacity: 1, // 确保文字始终可见，忽略这个如果您想要文字和图片同时渐变
+                color: 'white', 
+                textTransform: 'uppercase',
+                opacity: 1,
               }}
             >
               School Management System
@@ -119,7 +118,7 @@ export default function LoginPage() {
             <Typography component="p" variant="subtitle1" sx={{ my: 1, color: 'grey.800' }}>
               I am
             </Typography>
-            {/* 添加头像 */}
+            {/* choose login type by avatar */}
             <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
               <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mx: 2 }}>
                 <Avatar sx={{ bgcolor: avatarColors.teacher, cursor: 'pointer' }} onClick={() => handleRoleSelect('teacher')}>
@@ -196,14 +195,13 @@ export default function LoginPage() {
               </Button>
             </Box>
             <Container sx={{ textAlign: 'center' }}>
-              {/* 添加点击事件 */}
               <Link href="#" variant="body2" onClick={handleForgotPassword}>
                 Forgot password?
               </Link>
             </Container>
           </Box>
         </Grid>
-        {/* 弹出提示 */}
+
         <Snackbar 
           open={open} 
           autoHideDuration={6000} 

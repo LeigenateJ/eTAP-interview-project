@@ -18,8 +18,8 @@ CREATE TABLE Teachers (
     FOREIGN KEY (school_id) REFERENCES Schools(school_id)
 );
 
-CREATE TABLE Classes (
-    class_id INT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE Classrooms (
+    classroom_id INT AUTO_INCREMENT PRIMARY KEY,
     school_id INT,
     name VARCHAR(255) NOT NULL,
     teacher_id INT,
@@ -30,8 +30,8 @@ CREATE TABLE Classes (
 CREATE TABLE Pupils (
     pupil_id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    class_id INT,
-    FOREIGN KEY (class_id) REFERENCES Classes(class_id)
+    classroom_id INT,
+    FOREIGN KEY (classroom_id) REFERENCES Classrooms(classroom_id)
 );
 
 CREATE TABLE Caregivers (
@@ -53,9 +53,9 @@ CREATE TABLE Pupil_Caregiver (
 
 CREATE TABLE DiscussionBoards (
     board_id INT AUTO_INCREMENT PRIMARY KEY,
-    class_id INT,
+    classroom_id INT,
     title VARCHAR(255) NOT NULL,
-    FOREIGN KEY (class_id) REFERENCES Classes(class_id)
+    FOREIGN KEY (classroom_id) REFERENCES Classrooms(classroom_id)
 );
 
 CREATE TABLE Posts (

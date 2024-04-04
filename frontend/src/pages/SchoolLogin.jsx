@@ -8,16 +8,43 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
+import '../styles/SchoolLoginPage.css'
 
 const SchoolLogin = ({ onSchoolLogin }) => {
-  const [schoolCode, setSchoolLoginName] = useState('');
+  const [schoolLoginName, setSchoolLoginName] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    // 这里添加学校登录的逻辑，如果成功，调用onSchoolLogin
-    onSchoolLogin(true); // 假设登录成功
+  
+    // 使用 fetch API 发送 POST 请求到后端
+    try {
+      const response = await fetch('http://localhost/backend/apis/schoolLogin.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: schoolLoginName,
+          password: password,
+        }),
+      });
+  
+      const data = await response.json();
+  
+      if (response.status === 200) {
+        // 登录成功
+        console.log('Login success:', data);
+        onSchoolLogin(true); // 通知父组件登录成功
+      } else {
+        // 登录失败，显示错误信息
+        alert(data.message); // 这是简单处理错误消息的方式
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      alert('An error occurred. Please try again later.');
+    }
   };
 
   const handleClickShowPassword = () => {
@@ -27,7 +54,7 @@ const SchoolLogin = ({ onSchoolLogin }) => {
   return (
     <div className='sch-login-bg'>
     <Container component="main" maxWidth="xs">
-      <Paper elevation={6} sx={{ mt: 8, p: 4, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <Paper elevation={6} sx={{ mt: 8, p: 4, display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '-60px'}}>
         <img src={eTAPLogo} alt="eTAP" style={{ width: '200px', marginBottom: '20px' }} />
         <Typography component="h1" variant="h5" sx={{ mb: 2, fontWeight: 'bold', color: 'rgb(0, 176, 185)' }}>
           School Login
@@ -43,7 +70,7 @@ const SchoolLogin = ({ onSchoolLogin }) => {
             name="schoolLoginName"
             autoComplete="school-login-name"
             autoFocus
-            value={schoolCode}
+            value={schoolLoginName}
             placeholder="School Login Name"
             onChange={(e) => setSchoolLoginName(e.target.value)}
             InputProps={{
