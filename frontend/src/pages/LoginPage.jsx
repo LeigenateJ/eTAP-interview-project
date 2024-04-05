@@ -12,6 +12,10 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import InputAdornment from '@mui/material/InputAdornment';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import WarningAmberOutlinedIcon from '@mui/icons-material/WarningAmberOutlined';
+import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
+
+import { useUser } from '../contexts/UserContext';
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
@@ -19,15 +23,70 @@ import '../styles/LoginPage.css'
 
 const theme = createTheme();
 
+const ErrorAlert = ({ message, onClose }) => {
+  return (
+    <Paper variant="outlined" sx={{ borderColor: 'error.main', bgcolor: 'background.paper', p: 1, mb: 2, display: 'flex', alignItems: 'center' }}>
+      <WarningAmberOutlinedIcon color="error" />
+      <Typography variant="body2" sx={{ ml: 1, flexGrow: 1, color: 'error.dark' }}>
+        {message}
+      </Typography>
+      <IconButton onClick={onClose}>
+        <CancelOutlinedIcon fontSize="inherit" color="error" />
+      </IconButton>
+    </Paper>
+  );
+};
+
 export default function LoginPage() {
   const [open, setOpen] = React.useState(false); // Snackbar state
   const [selectedRole, setSelectedRole] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
+  const { loginUser } = useUser();
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState({
+    role: '',
+    username: '',
+    password: '',
+  });
+  const [showErrorAlert, setShowErrorAlert] = useState(false);
+
+  const validateForm = () => {
+    let isValid = true;
+    const errors = { role: '', username: '', password: '' };
+
+    if (!selectedRole) {
+      errors.role = 'Please select a role.';
+      isValid = false;
+    }
+
+    if (!username.trim()) {
+      errors.username = 'Please enter your username.';
+      isValid = false;
+    }
+
+    if (!password.trim()) {
+      errors.password = 'Please enter your password.';
+      isValid = false;
+    }
+
+    setError(errors);
+    return isValid;
+  };
 
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    // handle login
+    if (!validateForm()) return;
+    const success = await loginUser(username, password, selectedRole);
+    if (success) {
+      // successed
+      console.log('Logged in successfully');
+    } else {
+      //failed
+      console.log('Failed to login');
+      setShowErrorAlert(true);
+    }
   };
 
   
@@ -133,6 +192,13 @@ export default function LoginPage() {
                 <Typography variant="caption" sx={{ mt: 1, color: selectedRole === 'caregiver' ? 'grey.800' : 'grey.400' }}>Caregiver</Typography>
               </Box>
             </Box>
+            <Typography color="error">{error.role}</Typography>
+            {showErrorAlert && (
+            <ErrorAlert
+              message="You have entered an incorrect username name or password."
+              onClose={() => setShowErrorAlert(false)}
+            />
+          )}
             <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1, width: '80%'}}>
               <TextField
                 margin="normal"
@@ -142,8 +208,12 @@ export default function LoginPage() {
                 label="Username"
                 name="username"
                 autoComplete="username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
                 autoFocus
-                placeholder="Password"
+                placeholder="Username"
+                error={!!error.username}
+                helperText={error.username}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
@@ -160,8 +230,12 @@ export default function LoginPage() {
                 label="Password"
                 type={showPassword ? 'text' : 'password'}
                 id="password"
+                value={password}
                 autoComplete="current-password"
                 placeholder="Password"
+                onChange={(e) => setPassword(e.target.value)}
+                error={!!error.password}
+                helperText={error.password}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
@@ -191,7 +265,7 @@ export default function LoginPage() {
                 variant="contained"
                 sx={{ mt: 3, mb: 2, bgcolor: 'rgb(0, 176, 185)' }}
               >
-                Sign In
+                Log In
               </Button>
             </Box>
             <Container sx={{ textAlign: 'center' }}>

@@ -7,43 +7,67 @@ import SchoolIcon from '@mui/icons-material/School';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import WarningAmberOutlinedIcon from '@mui/icons-material/WarningAmberOutlined';
+import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 
 import '../styles/SchoolLoginPage.css'
+import { useUser } from '../contexts/UserContext';
+
+const ErrorAlert = ({ message, onClose }) => {
+  return (
+    <Paper variant="outlined" sx={{ borderColor: 'error.main', bgcolor: 'background.paper', p: 1, mb: 2, display: 'flex', alignItems: 'center' }}>
+      <WarningAmberOutlinedIcon color="error" />
+      <Typography variant="body2" sx={{ ml: 1, flexGrow: 1, color: 'error.dark' }}>
+        {message}
+      </Typography>
+      <IconButton onClick={onClose}>
+        <CancelOutlinedIcon fontSize="inherit" color="error" />
+      </IconButton>
+    </Paper>
+  );
+};
 
 const SchoolLogin = ({ onSchoolLogin }) => {
   const [schoolLoginName, setSchoolLoginName] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [errors, setErrors] = useState({ schoolLoginName: '', password: '' });
+  const { loginSchool } = useUser();
+  const [showErrorAlert, setShowErrorAlert] = useState(false);
+
+  const validateForm = () => {
+    const newErrors = { schoolLoginName: '', password: '' };
+    let isValid = true;
+
+    if (!schoolLoginName.trim()) {
+      newErrors.schoolLoginName = 'School Login Name is required';
+      isValid = false;
+    }
+    if (!password.trim()) {
+      newErrors.password = 'Password is required';
+      isValid = false;
+    }
+
+    setErrors(newErrors);
+    return isValid;
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    if (!validateForm()) return;
   
-    // 使用 fetch API 发送 POST 请求到后端
-    try {
-      const response = await fetch('http://localhost/backend/apis/schoolLogin.php', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          username: schoolLoginName,
-          password: password,
-        }),
-      });
+    const success = await loginSchool(schoolLoginName, password);
   
-      const data = await response.json();
-  
-      if (response.status === 200) {
-        // 登录成功
-        console.log('Login success:', data);
-        onSchoolLogin(true); // 通知父组件登录成功
-      } else {
-        // 登录失败，显示错误信息
-        alert(data.message); // 这是简单处理错误消息的方式
-      }
-    } catch (error) {
-      console.error('Login error:', error);
-      alert('An error occurred. Please try again later.');
+    if (success) {
+
+        console.log('Login successed');
+        onSchoolLogin(true); 
+    } else {
+
+        console.log('Login failed:');
+        setShowErrorAlert(true);
+
     }
   };
 
@@ -59,7 +83,13 @@ const SchoolLogin = ({ onSchoolLogin }) => {
         <Typography component="h1" variant="h5" sx={{ mb: 2, fontWeight: 'bold', color: 'rgb(0, 176, 185)' }}>
           School Login
         </Typography>
-        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
+        {showErrorAlert && (
+            <ErrorAlert
+              message="You have entered an incorrect school name or password."
+              onClose={() => setShowErrorAlert(false)}
+            />
+          )}
+        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
         <TextField
             variant="outlined"
             margin="normal"
@@ -73,6 +103,8 @@ const SchoolLogin = ({ onSchoolLogin }) => {
             value={schoolLoginName}
             placeholder="School Login Name"
             onChange={(e) => setSchoolLoginName(e.target.value)}
+            error={!!errors.schoolLoginName}
+            helperText={errors.schoolLoginName}
             InputProps={{
                 startAdornment: (
                 <InputAdornment position="start">
@@ -93,6 +125,8 @@ const SchoolLogin = ({ onSchoolLogin }) => {
             autoComplete="current-password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            error={!!errors.password}
+            helperText={errors.password}
             placeholder="Password"
             InputProps={{
                 startAdornment: (
@@ -119,7 +153,7 @@ const SchoolLogin = ({ onSchoolLogin }) => {
             variant="contained"
             sx={{ mt: 3, mb: 2 , bgcolor: 'rgb(0, 176, 185)'}}
           >
-            Sign In
+            Log In
           </Button>
         </Box>
       </Paper>
