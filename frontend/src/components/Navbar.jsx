@@ -7,10 +7,13 @@ import eTAPLogo from '../assets/etap.png';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import { useUser } from '../contexts/UserContext';
 
+import { useNavigate } from 'react-router-dom';
+
 const Navbar = ({ handleDrawerToggle, title }) => {
     const { userInfo } = useUser();
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
+    const navigate = useNavigate();
 
     const handleMenu = (event) => {
         setAnchorEl(event.currentTarget);
@@ -38,7 +41,9 @@ const Navbar = ({ handleDrawerToggle, title }) => {
           <MenuIcon />
         </IconButton>
         <img src={eTAPLogo} alt="Logo" style={{ height: '40px', marginRight: '40px' }} />
-        <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1, fontWeight: 'bold', color: 'white', marginLeft: '30px' }}>
+        <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1, fontWeight: 'bold', color: 'white', marginLeft: '30px' }}
+          onClick={() => navigate('/board')} 
+        >
           {title}
         </Typography>
         <Button 
