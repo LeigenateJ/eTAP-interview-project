@@ -151,7 +151,12 @@ const SchoolLogin = ({ onSchoolLogin }) => {
             type="submit"
             fullWidth
             variant="contained"
-            sx={{ mt: 3, mb: 2 , bgcolor: 'rgb(0, 176, 185)'}}
+            sx={{ mt: 3, mb: 2 , bgcolor: 'rgb(0, 176, 185)', 
+            '&:hover': {
+              bgcolor: 'rgb(0, 196, 205)', 
+            },
+            '&:active': {
+              bgcolor: 'rgb(0, 156, 165)'}}}
           >
             Log In
           </Button>
